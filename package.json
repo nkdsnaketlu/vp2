@@ -1,0 +1,29 @@
+{
+  "name": "vp2",
+  "version": "1.0.0",
+  "description": "vp ruhm 2 express js rakendus",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://nkdsnaketlu@github.com/nkdsnaketlu/vp2.git"
+  },
+  "keywords": [
+    "veebiprogrameerimine",
+    "node.js",
+    "java",
+    "tallinna",
+    "ülikool"
+  ],
+  "author": "Maria Rjabtseva",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nkdsnaketlu/vp2/issues"
+  },
+  "homepage": "https://github.com/nkdsnaketlu/vp2#readme", 
+  "dependencies": {
+    "express": "~4.16.1"
+  }
+}
