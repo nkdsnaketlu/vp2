@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+	<meta charset="utf-8">
+	<title>Big Boss</title>
+</head>
+<body style="background-color:#2b3d5c;">';
+	<img src="/banner/vp_banner_2024.png" alt="vb 2024 aasta kursuse bänner">';
+	<h1 style="color:white;" >Maria Rjabtseva </h1>
+	<p style="color:white;">See leht on loodud õppetöö raames <a href="https://www.tlu.ee" style="color: #94d0fa">Tallinna ülikoolis</a>, Digitehnoloogiate instituudis ja ei sisalda tõsiseltvõetavat materjali</p>
+	<hr>
+	<ul>
+	 <li><a href= "/timenow">Avalehele</a></li>
+	</ul>
+	<hr>
+	<h2><%= h2 %></h2>
+	<p>Selle lehe avamise helkel oli:</p>
+	<ol>
+	 <%= listData.forEach(function(phrase){ %>
+	  <li><%= phrase %></li>
+	 <% }); %>
+	</ol>
+</body>
+</html>

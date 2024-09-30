@@ -22,8 +22,9 @@
   "bugs": {
     "url": "https://github.com/nkdsnaketlu/vp2/issues"
   },
-  "homepage": "https://github.com/nkdsnaketlu/vp2#readme", 
+  "homepage": "https://github.com/nkdsnaketlu/vp2#readme",
   "dependencies": {
-    "express": "~4.16.1"
+    "ejs": "^3.1.10",
+    "express": "^4.21.0"
   }
 }
