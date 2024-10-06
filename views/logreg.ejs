@@ -10,10 +10,14 @@
 	<p style="color:white;">See leht on loodud õppetöö raames <a href="https://www.tlu.ee" style="color: #94d0fa">Tallinna ülikoolis</a>, Digitehnoloogiate instituudis ja ei sisalda tõsiseltvõetavat materjali</p>
 	<hr>
 	<ul>
-	 <li><a href= "/timenow" style="color: #94d0fa">Ajainfo</a></li>
-	 <li><a href= "/vanasonad" style="color: #94d0fa">Vanasonad</a></li>
-	 <li><a href= "/regvisit" style="color: #94d0fa">registreeri oma külastuse</a></li>
-	 <li><a href= "/visitlog" style="color: #94d0fa">registreeritud külastused</a></li>
-	 <hr>
+		<li><a href="/" style="color: #94d0fa">Avalehele</a></li>
+	</ul>
+	<hr>
+	<h2 style="color:white;">Log-ins</h2>
+	<ol style="color:white;">
+	<% listData.forEach(function(visit){ %>
+	  <li style="color:white;"><%= visit %></li>
+	<% }); %>
+	</ol>
 </body>
 </html>

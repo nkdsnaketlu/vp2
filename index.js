@@ -22,7 +22,7 @@ app.get("/timenow", (req, res)=>{
 	const weekdayNow = dateTime.weekDayEt();
 	const dateNow = dateTime.dateFormattedEt();
 	const timeNow = dateTime.timeFormattedEt();
-	res.render("timenow", {nowWD: weekdayNow, nowD: dateNow, nowT: timeNow});
+	res.render("timenow", {nowWD: weekdayNow, nowD: dateNow, nowWT: timeNow});
 });
 
 app.get("/vanasonad", (req, res)=>{
@@ -41,18 +41,21 @@ app.get("/vanasonad", (req, res)=>{
 });
 
 app.get("/regvisit", (req, res)=>{
-	res.render("regvisit");
+	const weekdayNow = dateTime.weekDayEt();
+	const dateNow = dateTime.dateFormattedEt();
+	const timeNow = dateTime.timeFormattedEt();
+	res.render("regvisit", {nowWD: weekdayNow, nowD: dateNow, nowWT: timeNow});
 });
 
 app.post("/regvisit", (req, res)=>{
 	//console.log(req.body);
 	//avan txt faili selliselt, et kui seda pole olemas, luuakse
-	fs.open("public/textfiles/log.txt", "a", (err, file) => {
+	fs.open("public/textfiles/log.txt", "a", (err, file) => { //"a" - append дописать
 		if (err) {
 			throw err;
 		}
 		else {
-			fs.appendFile("public/textfiles/log.txt", req.body.firstNameInput + " " + req.body.lastNameInput + ";" + " ", (err) => {
+			fs.appendFile("public/textfiles/log.txt", req.body.firstNameInput + " " + req.body.lastNameInput + " " + req.body.regTime + ";" + " ", (err) => {
 				if (err) {
 					throw err;
 				}
@@ -65,5 +68,20 @@ app.post("/regvisit", (req, res)=>{
 	});
 	//res.render("regvisit");
 });
+
+app.get("/visitlog", (req, res) => {
+    let logList = [];
+    fs.readFile("public/textfiles/log.txt", "utf8", (err, data) => { 
+        if (err) {
+            res.render("logreg", {listData: ["Ei leidnud midagi!"]});
+        } else {
+            logList = data.split(";");
+            res.render("logreg", {listData: logList});
+        }
+    });
+});
+
+///app.post("/visitlog"), (req, res)=>{
+//};
 
 app.listen(5216);
