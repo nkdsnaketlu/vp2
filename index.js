@@ -55,7 +55,7 @@ app.post("/regvisit", (req, res)=>{
 			throw err;
 		}
 		else {
-			fs.appendFile("public/textfiles/log.txt", req.body.firstNameInput + " " + req.body.lastNameInput + " " + req.body.regTime + ";" + " ", (err) => {
+			fs.appendFile("public/textfiles/log.txt", req.body.firstNameInput + " " + req.body.lastNameInput + " " + req.body.regTime + " " + req.body.regDay + ";" + " ", (err) => {
 				if (err) {
 					throw err;
 				}
