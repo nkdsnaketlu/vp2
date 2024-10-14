@@ -1,0 +1,6 @@
+CREATE TABLE `visitlog` (
+  `id` int(11) NOT NULL,
+  `first_name` varchar(50) COLLATE utf8mb4_estonian_ci NOT NULL,
+  `last_name` varchar(50) COLLATE utf8mb4_estonian_ci NOT NULL,
+  `visit_date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_estonian_ci;

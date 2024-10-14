@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+   <meta charset="utf-8">
+   <title>Big Boss</title>
+</head>
+<body style="background-color:#2b3d5c;">';
+   <img src="/banner/vp_banner_2024.png" alt="vb 2024 aasta kursuse bänner">';
+   <h1 style="color:white;" >Maria Rjabtseva </h1>
+   <p style="color:white;">See leht on loodud õppetöö raames <a href="https://www.tlu.ee" style="color: #94d0fa">Tallinna ülikoolis</a>, Digitehnoloogiate instituudis ja ei sisalda tõsiseltvõetavat materjali</p>
+  <hr>
+  <ul>
+	<li><a href="/" style="color: #94d0fa">Avalehele</a></li>
+  </ul>
+  <hr>
+  <h2 style="color:white;">Registreeri oma külastus sellele veebilehele (andmebaasi)</h2>
+   <form style="color:white;" method="POST">
+    <label for="firstNameInput">Sisesta oma eesnimi: </label>
+    <input type="text" id="firstNameInput" name="firstNameInput" placeholder="eesnimi ..." value = "<%= firstName %>" >
+    <br>
+    <label for="lastNameInput">Sisesta oma perekonnanimi: </label>
+    <input type="text" id="lastNameInput" name="lastNameInput" placeholder="perekonnanimi ..." value = "<%= lastName %>">
+    <br>
+	<input type="submit" id="regSubmit" name="regSubmit" value="Salvesta">
+	<input type="hidden" id="regDay" name="regDay" value="<%= nowD %>">
+	<input type="hidden" id="regTime" name="regTime" value="<%= nowWT %>">
+   </form>
+   <p><%= notice %></p>
+</body>
+</html> 
