@@ -153,8 +153,35 @@ app.post("/regvisitdb", (req, res)=>{
 });
 
 app.get("/eestifilm/lisa", (req, res)=>{
-	
-	res.render("addperson");
+	let sqlReq = "";
+	res.render("addmovieinfo");
+});
+
+app.post("/eestifilm/lisa", (req, res)=>{
+	let sqlReq = "";
+    let values = "";
+    if (req.body.movieNameInput) {
+        sqlReq = "INSERT INTO movie (title, duration, production_year) VALUES (?, ?, ?)";
+        values = [req.body.movieNameInput, req.body.movieDurationInput, req.body.productionYearInput];
+    } else if (req.body.firstNameInput) {
+        sqlReq = "INSERT INTO person (first_name, last_name, birth_date) VALUES (?, ?, ?)";
+        values = [req.body.firstNameInput, req.body.lastNameInput, req.body.birthDateInput];
+    } else if (req.body.characterNameInput) {
+        sqlReq = "INSERT INTO person_in_movie (role, movie_id, person_id, position_id) VALUES (?, ?, ?, ?)";
+        values = [req.body.characterNameInput, req.body.movieIdInput, req.body.personIdInput, req.body.positionIdInput];
+    }
+	if (sqlReq) {
+        conn.query(sqlReq, values, (err, sqlRes) => {
+			if (err) {
+                console.error("Error inserting data:", err);
+			} else {
+				console.log("Data inserted:", sqlRes);
+                res.redirect("/eestifilm/tegelased");
+            }
+		});
+	} else {
+		console.log("error");
+	}
 });
 
 app.listen(5216);
