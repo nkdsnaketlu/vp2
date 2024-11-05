@@ -1,6 +1,11 @@
+//külastuse logi
 CREATE TABLE `visitlog` (
   `id` int(11) NOT NULL,
   `first_name` varchar(50) COLLATE utf8mb4_estonian_ci NOT NULL,
   `last_name` varchar(50) COLLATE utf8mb4_estonian_ci NOT NULL,
   `visit_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_estonian_ci;
+
+----------------------------------
+//kasutajad
+CREATE TABLE `if24_Maria_Rj_DM`.`vp_users` (`ID` INT(11) NOT NULL AUTO_INCREMENT , `first_name` VARCHAR(50) NOT NULL , `last_name` VARCHAR(50) NOT NULL , `birth_date` DATE NOT NULL , `gender` INT(1) NOT NULL , `email` VARCHAR(100) NOT NULL , `password` VARCHAR(60) NOT NULL , `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`ID`)) ENGINE = InnoDB;
