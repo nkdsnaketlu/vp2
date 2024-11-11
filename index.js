@@ -15,6 +15,8 @@ const sharp = require("sharp");
 const bcrypt = require("bcrypt");
 //sessioonihaldur
 const session = require("express-session");
+//asünkroosuse võimaldaja
+const asyn = require("async");
 
 const app = express();
 
@@ -128,15 +130,28 @@ app.post("/signup", (req, res)=>{
 					if (err){
 						notice = "Tehniline viga, kasutajat ei loodud.";
 						res.render("signup", {notice: notice});
-					} else {
-						let sqlReq = "INSERT INTO vp_users (first_name, last_name, birth_date, gender, email, password) VALUES (?, ?, ?, ?, ?, ?)";
-						conn.execute(sqlReq, [req.body.firstNameInput, req.body.lastNameInput, req.body.birthDateInput, req.body.genderInput, req.body.emailInput, pwdHash], (err, result)=>{
-							if (err) {
-								notice = "Tehniline viga andmebaasilise kirjutamisel, kasutajat ei loodud.";
-								res.render("signup", {notice: notice});
+					} else {	
+						let sqlReq = "SELECT id FROM vp_users WHERE email = ?";
+						conn.execute(sqlReq, [req.body.emailInput], (err, result)=>{
+							if (result[0] != null) {
+							console.log("Email on juba registreeritud");
+							birthDay = req.body.birthDateInput;
+							firstName = req.body.firstNameInput;
+							lastName = req.body.lastNameInput;
+							emailIn = req.body.emailInput
+							notice = req.body.emailInput +" on juba registreeritud";
+							res.render("signup", {notice: notice, firstName: firstName, lastName: lastName, emailIn: emailIn, birthDay: birthDay});
 							} else {
-								notice = "Kasutaja " + req.body.emailInput + " on edukalt loodud";
-								res.render("signup", {notice: notice});
+								let sqlReq = "INSERT INTO vp_users (first_name, last_name, birth_date, gender, email, password) VALUES (?, ?, ?, ?, ?, ?)";
+								conn.execute(sqlReq, [req.body.firstNameInput, req.body.lastNameInput, req.body.birthDateInput, req.body.genderInput, req.body.emailInput, pwdHash], (err, result)=>{
+								if (err) {
+									notice = "Tehniline viga andmebaasilise kirjutamisel, kasutajat ei loodud.";
+									res.render("signup", {notice: notice});
+								} else {
+									notice = "Kasutaja " + req.body.emailInput + " on edukalt loodud";
+									res.render("signup", {notice: notice});
+								}
+							});
 							}
 						});
 					}
@@ -205,7 +220,7 @@ app.get("/eestifilm", (req, res) => {
 
 app.get("/eestifilm/tegelased", (req, res) => {
 	//loon andmbaasipäringu
-	let sqlReq = "SELECT first_name, last_name, birth_date FROM person";
+	let sqlReq = "SELECT id, first_name, last_name, birth_date FROM person";
 	conn.query(sqlReq, (err, sqlRes)=>{
 		if(err){
 			res.render("tegelased", {persons: []});
@@ -217,6 +232,13 @@ app.get("/eestifilm/tegelased", (req, res) => {
 	});
 });
 
+app.get("/eestifilm/personrelations/:id", (req, res)=>{
+	console.log(req.params.id);
+	//"SELECT movie_id, position_id FROM person_in_movie WHERE person_id = ?"
+	
+	});
+	//res.render("relations",);
+});
 app.get("/regvisitdb", (req, res)=>{
 	let notice = "";
 	let firstName = "";
@@ -256,6 +278,62 @@ app.post("/regvisitdb", (req, res)=>{
 app.get("/eestifilm/lisa", (req, res)=>{
 	let sqlReq = "";
 	res.render("addmovieinfo");
+});
+
+app.get("/eestifilm/lisaseos", (req, res)=>{
+	//kasutades async modulit, panen mitu andmebaasipäringut paraleelselt toimima
+	//loon SQL päringute(lausa tegevuste ehk funktsioonide) loendi
+	const myQueries = [
+		function(callback){
+			conn.execute("SELECT id, first_name, last_name, birth_date FROM person", (err, result)=>{
+				if(err){
+					return callback(err);
+				} else {
+					return callback(null, result);
+				}
+			});
+		},
+		function(callback){
+			conn.execute("SELECT id, title, production_year FROM movie", (err, result)=>{
+				if(err){
+					return callback(err);
+				} else {
+					return callback(null, result);
+				}
+			});
+		},
+		function(callback){
+			conn.execute("SELECT id, position_name FROM position", (err, result)=>{
+				if(err){
+					return callback(err);
+				}
+				else {
+					return callback(null, result);
+				}
+			});
+		}
+	];
+	//paneme need tegevused paraleelselt tööle, tulemuse saab siis, kui kõik tehtud
+	//väljundiks üks koondlist
+	asyn.parallel(myQueries, (err, results)=>{
+		if(err){
+			throw err;
+		} else {
+			console.log(results);
+			res.render("addrelations", {personList: results[0], movieList: results[1], positionList: results[2]});
+		}
+	});
+	/* let sqlReq = "SELECT id, first_name, last_name, birth_date FROM person";
+	
+	conn.execute(sqlReq, (err, result)=>{
+		if(err){
+			throw err;
+		} else {
+			console.log(result);
+			res.render("addrelations", {personList: result});
+		}
+	}); */
+	//res.render("addrelations");
 });
 
 app.post("/eestifilm/lisa", (req, res)=>{
@@ -336,20 +414,24 @@ app.post("/gallery/photoupload", upload.single("photoInput"), (req, res)=>{
 });
 
 app.get("/gallery/photos", (req, res)=>{
+	let sqlReq = "SELECT id, file_name, alt_text FROM fotod WHERE privacy = ? AND deleted IS NULL ORDER BY id DESC";
+	const privacy = 3;
 	let photoList = [];
-	let sqlReq = "SELECT file_name, alt_text FROM fotod";
-	conn.query(sqlReq, (err, result)=>{
-		if (err) {
-			throw err
-		} else {
-			//for(let i=0; i < result.lenght; i ++){
-			//	fs.readFile("public/gallery/thumb/" + file_name, "jpg", (err, data)=>{	
-			//	});
-			photoList.forEach(file_name, alt_text);
+	conn.execute(sqlReq, [privacy], (err, result)=>{
+		if(err){
+			throw err;
+		}
+		else {
+			console.log(result);
+			for(let i = 0; i < result.length; i ++) {
+				photoList.push({id: result[i].id,  href: "/gallery/thumb/", filename: result[i].file_name, alt: result[i].alt_text});
+			}
 			res.render("photos", {listData: photoList});
 		}
 	});
+	//res.render("gallery");
 });
+
 
 app.post("/gallery/photos", (req, res)=>{
 	res.render("photos");

@@ -16,13 +16,13 @@
   <h2 style="color:white;">Kasutaja konto loomine</h2>
    <form style="color:white;" method="POST">
     <label for="firstNameInput">Sisesta oma eesnimi: </label>
-    <input type="text" id="firstNameInput" name="firstNameInput" placeholder="eesnimi ...">
+    <input type="text" id="firstNameInput" name="firstNameInput" placeholder="eesnimi ..." value="<%= locals.firstName || '' %>">
     <br>
     <label for="lastNameInput">Sisesta oma perekonnanimi: </label>
-    <input type="text" id="lastNameInput" name="lastNameInput" placeholder="perekonnanimi ...">
+    <input type="text" id="lastNameInput" name="lastNameInput" placeholder="perekonnanimi ..." value="<%= locals.lastName || '' %>">
     <br>
 	<label for="birthDateInput">Sisesta oma sünnipäev: </label>
-    <input type="date" id="birthDateInput" name="birthDateInput">
+    <input type="date" id="birthDateInput" name="birthDateInput" value="<%= locals.birthDay || '' %>">
     <br>
     <input type="radio" id="genderInput1" name="genderInput" value="1" checked>
 	<label for="genderInput1">Mees</label>
@@ -31,10 +31,10 @@
 	<label for="genderInput2">Naine</label>
     <br>
 	<label for="emailInput">E-mail (kasutajatunneks): </label>
-    <input type="email" id="emailInput" name="emailInput" placeholder="e-mail ...">
+    <input type="email" id="emailInput" name="emailInput" placeholder="e-mail ..." value="<%= locals.emailIn || '' %>">
     <br>
 	<label for="passwordInput">Salasõna (min 8 märki) </label>
-    <input type="password" id="passwordInput" name="passwordInput" placeholder="password ...">
+    <input type="password" id="passwordInput" name="passwordInput" placeholder="password ..." >
     <br>
 	<label for="confirmPasswordInput">Korda salasõna </label>
     <input type="password" id="confirmPasswordInput" name="confirmPasswordInput" placeholder="confirm password ...">

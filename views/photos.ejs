@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="et">
 <head>
-   <meta charset="utf-8">
-   <title>Big Boss</title>
+  <meta charset="utf-8">
+  <title>Big Boss</title>
+  <link rel="stylesheet" href="/style/gallery.css">
+  <link rel="stylesheet" href="/style/modal.css">
+  <script src="/script/gallery.js" defer></script>
 </head>
 <body style="background-color:#2b3d5c;">';
    <img src="/banner/vp_banner_2024.png" alt="vb 2024 aasta kursuse bänner">';
@@ -14,8 +17,20 @@
 	<li><a href="/gallery/photoupload" style="color: #94d0fa">Laadi oma fotod</a></li>
   </ul>
   <hr>
+  <dialog id="modal" class="modalarea">
+	<span id="modalClose" class="modalclose">&times;</span>
+	<div class="modalhorizontal">
+		<div class="modavertical">
+			<p id="modalCaption"></p>
+			<img id="modalImage" src="/pics/empty.png" alt="galeriipilt">
+		</div>
+	</div>
+  </dialog>
   <h2 style="color:white;">Gallery</h2>
-  <img src="/gallery/thumb/vp_1730113910351.jpg" alt="Cullen"/>
-  
+  <div class="gallery">
+	  <% listData.forEach(function(image){ %>
+		<img src="<%= image.href %><%= image.filename %>" alt="<%= image.alt %>" data-filename="<%=image.filename %>" data-id="<%= image.id %>" class="thumbs">
+	  <% }); %>
+  </div>
 </body>
 </html>
