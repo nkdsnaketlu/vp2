@@ -30,7 +30,7 @@ app.use(bodyparser.urlencoded({extended: true}));
 const upload = multer({dest: "./public/gallery/foto"});
 //sessionihaldur
 app.use(session({secret: "secretKey", saveUninitialized: true, resave: true}));
-let mySession;
+//let mySession;
 
 //loon andmbaasi ühenduse
 const conn = mysql.createConnection({
@@ -39,6 +39,11 @@ const conn = mysql.createConnection({
 	password: dbInfo.configData.passWord,
 	database: dbInfo.configData.dataBase
 }); //conn - connection
+
+//uudiste osa eraldi ruuteriga
+const newsRouter = require("./routes/newsrouter");
+app.use("/news", newsRouter);
+
 
 app.get("/", (req, res)=>{
 	//res.send("ekspress läks käima");
@@ -72,9 +77,10 @@ app.post("/", (req, res)=>{
 							if(compareresult){
 								notice = "Oledki sisseloginud!";
 								//võtame sessioni kasutusele
-								mySession = req.session;
-								mySession.userId = result[0].id;
+								//mySession = req.session;
+								//mySession.userId = result[0].id;
 								//res.render("index", {notice: notice});
+								req.session.userId = result[0].id;
 								res.redirect("/home");
 							} else {
 								notice = "Kasutajatunnus ja/või parool oli vale";
@@ -92,8 +98,8 @@ app.post("/", (req, res)=>{
 	//res.render("index");
 });
 
-app.get("/home", checkLogin, (req, res)=>{
-	console.log("Sisse on loginud kasutaja: "+ mySession.userId);
+app.get("/home", (req, res)=>{
+	console.log("Sisse on loginud kasutaja: "+ req.session.userId);
 	res.render("home");
 });
 
@@ -105,7 +111,7 @@ app.post("/home", (req, res)=>{
 
 app.get("/logout", (req, res) =>{
 	req.session.destroy();
-	mySession = null;
+	//mySession = null;
 	res.redirect("/");
 });
 
@@ -238,7 +244,7 @@ app.get("/eestifilm/personrelations/:id", (req, res)=>{
 	
 	});
 	//res.render("relations",);
-});
+	//});
 app.get("/regvisitdb", (req, res)=>{
 	let notice = "";
 	let firstName = "";
@@ -432,25 +438,25 @@ app.get("/gallery/photos", (req, res)=>{
 	//res.render("gallery");
 });
 
+//uudiste osa on eraldi ruuteriga
 
 app.post("/gallery/photos", (req, res)=>{
 	res.render("photos");
 });
 
 function checkLogin(req, res, next){
-	if(mySession != null){
-		if(mySession.userId){
+	if(req.session != null){
+		if(req.session.userId){
 			console.log("Login ok!");
 			next();
-		}
-		else {
+		} else {
 			console.log("Login not detected!");
 			res.redirect("/");
 		}
-	}
-	else {
+	} else {
 		res.redirect("/");
 	}
 }
+
 
 app.listen(5216);
