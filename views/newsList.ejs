@@ -18,6 +18,12 @@
 	</ul>
 	<hr>
 	<h2 style="color: white">Viimased uudised</h2>
+	<ul style="color: white">
+	<% newsL.forEach(function(item){ %>
+	<li><%= item.news_title %>
+	</li>
+	<% }); %>
+  </ul>
 
 </body>
 </html>

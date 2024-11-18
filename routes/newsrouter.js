@@ -5,7 +5,8 @@ const general = require("../generalfmc");
 const {newsHome,
 	addNews,
 	addingNews,
-	newsList} = require("../controllers/newsController");
+	newsList,
+	getNews} = require("../controllers/newsController");
 
 //kõikidele marsruudidele vahevara checkLogin
 router.use(general.checkLogin);
@@ -20,6 +21,8 @@ router.route("/add").get(addNews);
 router.route("/add").post(addingNews);
 
 router.route("/read").get(newsList);
+
+router.route("/readnews/id:").get(getNews);
 
 module.exports = router;
 

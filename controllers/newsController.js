@@ -48,7 +48,7 @@ const addingNews = (req, res)=>{
 	}
 };
 
-//@desc read news
+//@desc late news
 //@route GET /api/news
 //@access private
 
@@ -57,17 +57,27 @@ const newsList = (req, res)=>{
 	let newsL = [];
 	conn.query(sqlReq, (err, sqlRes)=>{
 		if(err){
-			res.render("readnews", {newsL: []});
+			res.render("newsList", {newsL: []});
 		} else {
 			console.log(sqlRes);
-			res.render("readnews", {newsL: sqlRes});
+			res.render("newsList", {newsL: sqlRes});
 		}
 	});
+};
+
+//@desc read news
+//@route GET /api/news
+//@access private
+
+const getNews = (req, res)=>{
+	console.log(req.params.id);
+	res.render("readNews");
 };
 
 module.exports = {
 	newsHome,
 	addNews,
 	addingNews,
-	newsList
+	newsList,
+	getNews
 };
