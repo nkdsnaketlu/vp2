@@ -50,7 +50,21 @@ app.use("/eestifilm", moviesRouter);
 app.get("/", (req, res)=>{
 	//res.send("ekspress läks käima");
 	//console.log(dbInfo.configData.host);
-	res.render("index");
+	let sqlReq = "SELECT news_title, news_text FROM vpnews ORDER BY RAND() LIMIT 1";
+	news = [];
+	//res.send("ekspress läks käima");
+	//console.log(dbInfo.configData.host);
+	conn.execute(sqlReq, (err, sqlRes)=>{
+		if(err){
+			console.log(err);
+			res.render("index", {news: []});
+		} else {
+			console.log(sqlReq);
+			console.log(sqlRes);
+			res.render("index", {news: sqlRes});
+		}
+	});
+	//res.render("index");
 });
 
 app.post("/", (req, res)=>{
@@ -106,8 +120,6 @@ app.get("/home", (req, res)=>{
 });
 
 app.post("/home", (req, res)=>{
-	//res.send("ekspress läks käima");
-	//console.log(dbInfo.configData.host);
 	res.render("home");
 });
 

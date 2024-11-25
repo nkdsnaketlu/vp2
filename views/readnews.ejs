@@ -15,10 +15,10 @@
 	<li><a href="/eestifilm" style="color: #94d0fa">Eesti filmi avaleht</a></li>
   </ul>
   <hr>
-  <% newsL.forEach(function(item){ %>
-  <h2 style="color: white"><%= item.news_title %></h2>
-	<a style="color: #94d0fa" href="/news/personrelations/id=<%= item.id %>"><%= item.news_text %></p>
-	<% }); %>
+  <h2 style="color:white;"><%=news[0].news_title%></h2>
+  <p style="color:white;"><%=news[0].news_text%></p>
+  <p style="color:white;">Added: <%=news[0].news_date%></p>
+  <p style="color:white;">Autor: <%=news[0].first_name%> <%=news[0].last_name%></p>
 <hr>
 </body>
 </html> 

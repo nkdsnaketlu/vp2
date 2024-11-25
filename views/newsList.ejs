@@ -12,7 +12,7 @@
 	<h2 style="color: white">Vinge veeb</h2>
 	<ul style="color: white">
 	 <li><a href="/news/add" style="color: #94d0fa">Uudise lisamine</a></li>
-		<li><a href="/news/read"style="color: #94d0fa" >Uudiste lugemine</a></li>
+		<li><a href="/news/read"style="color: #94d0fa" >Uudiste list</a></li>
 		<li><a href="/home" style="color: #94d0fa">Kodulehele</a></li>
 		<li><a href="/" style="color: #94d0fa">Avalehele</a></li>
 	</ul>
@@ -20,8 +20,7 @@
 	<h2 style="color: white">Viimased uudised</h2>
 	<ul style="color: white">
 	<% newsL.forEach(function(item){ %>
-	<li><%= item.news_title %>
-	</li>
+	<li><a style="color: #949dfa" href="/news/readnews/id=<%= item.id %>"><%= item.news_title %></a></li>
 	<% }); %>
   </ul>
 

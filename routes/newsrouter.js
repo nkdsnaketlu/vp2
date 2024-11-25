@@ -22,7 +22,7 @@ router.route("/add").post(addingNews);
 
 router.route("/read").get(newsList);
 
-router.route("/readnews/id:").get(getNews);
+router.route("/readnews/:id").get(getNews);
 
 module.exports = router;
 

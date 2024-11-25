@@ -1,5 +1,6 @@
 const mysql = require("mysql2");
 const dbInfo = require("../../../vp2024config");
+const asyn = require("async");
 const conn = mysql.createConnection({
 	host: dbInfo.configData.host,
 	user: dbInfo.configData.user,
@@ -53,8 +54,8 @@ const addingNews = (req, res)=>{
 //@access private
 
 const newsList = (req, res)=>{
-	let sqlReq = "SELECT news_title, news_text, news_date FROM vpnews";
-	let newsL = [];
+	let sqlReq = "SELECT id, news_title, news_text, news_date FROM vpnews";
+	//let newsL = [];
 	conn.query(sqlReq, (err, sqlRes)=>{
 		if(err){
 			res.render("newsList", {newsL: []});
@@ -71,7 +72,26 @@ const newsList = (req, res)=>{
 
 const getNews = (req, res)=>{
 	console.log(req.params.id);
-	res.render("readNews");
+	let sqlReq = "SELECT news_title, news_text, news_date, first_name, last_name FROM vp_users JOIN vpnews ON vp_users.id=vpnews.user_id WHERE vpnews.id=?";
+	//let sqlReq = "SELECT news_title, news_text, news_date, first_name, last_name FROM vpnews WHERE vpnews.id=?";
+	//news = [];
+	let id = req.params.id;
+	if (!req.params.id) {
+        return res.status(400).send("ID новости не указан");
+    } else {
+		conn.execute(sqlReq, [id.slice(3)], (err, sqlRes) => {
+			if (err) {
+                console.error("Error:", err);
+				res.render("readnews", {news: []});
+			} else {
+				console.log(sqlReq);
+				console.log(sqlRes);
+                res.render("readnews", {news: sqlRes});
+            }
+		});
+	};
+	
+	//res.render("readNews");
 };
 
 module.exports = {

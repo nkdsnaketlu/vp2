@@ -38,7 +38,7 @@ const movieCharacters = (req, res) => {
 //@access private
 
 const addMovieInfo = (req, res)=>{
-	let sqlReq = "";
+	let sqlReq = "SELECT first_name, last_name, title, production_year, position_name  FROM person JOIN person_in_movie ON person_in_movie.person_id=person.id JOIN movie ON person_in_movie.movie_id=movie.id JOIN position  ON person_in_movie.position_id=position.id";
 	res.render("addmovieinfo");
 }
 
@@ -79,14 +79,42 @@ const addingMovieInfo = (req, res)=>{
 
 const movieRelations = (req, res)=>{
 	console.log(req.params.id);
-	res.render("relations");
+	let sqlReq = "SELECT first_name, last_name, title, production_year, position_name, role, duration FROM person JOIN person_in_movie ON person_in_movie.person_id=person.id JOIN movie ON person_in_movie.movie_id=movie.id JOIN position ON person_in_movie.position_id=position.id WHERE person.id=?";
+	//moviesList = [];
+	let id = req.params.id;
+	console.log(id);
+	conn.execute(sqlReq, [id.slice(3)], (err, sqlRes) => {
+			if (err) {
+                console.error("Error:", err);
+				res.render("relations", {moviesList: []});
+			} else {
+				console.log(sqlReq);
+				console.log(sqlRes);
+                res.render("relations", {moviesList: sqlRes});
+            }
+		});
+	//res.render("relations");
 }
+
+const addedRelation = (req, res)=>{
+	let sqlReq = "INSERT INTO person_in_movie (person_id, movie_id, position_id, role) VALUES(?, ?, ?, ?)";
+	let values = [req.body.personSelect, req.body.movieSelect, req.body.positionSelect, req.body.roleInput];
+	conn.execute(sqlReq, values, (err, sqlRes) => {
+			if (err) {
+                console.error("Error inserting data:", err);
+			} else {
+				console.log("Data inserted:", sqlRes);
+				id = req.body.personSelect;
+                res.redirect(`/eestifilm/personrelations/id=${id}`);
+            }
+		});
+};
 
 //@desc add relations of person to other movies
 //@route GET /api/movies
 //@access private
 
-const addRealtion = (req, res)=>{
+const addingRealtion = (req, res)=>{
 	//kasutades async modulit, panen mitu andmebaasipäringut paraleelselt toimima
 	//loon SQL päringute(lausa tegevuste ehk funktsioonide) loendi
 	const myQueries = [
@@ -129,7 +157,10 @@ const addRealtion = (req, res)=>{
 			res.render("addrelations", {personList: results[0], movieList: results[1], positionList: results[2]});
 		}
 	});
+	
 };
+
+// select first_name,last_name, role, title, position_name from person join person_in_movie on person.id=person_in_movie.person_id join movie on movie.id=person_in_movie.movie_id join position on person_in_movie.position_id=position_id;
 
 module.exports = {
 	movieHome,
@@ -137,5 +168,6 @@ module.exports = {
 	addMovieInfo,
 	addingMovieInfo,
 	movieRelations,
-	addRealtion
+	addingRealtion,
+	addedRelation
 };

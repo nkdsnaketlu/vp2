@@ -15,8 +15,10 @@
 	<li><a href="/eestifilm" style="color: #94d0fa">Eesti filmi avaleht</a></li>
   </ul>
   <hr>
-  <h2 style="color:white;">Ühe tegelase filmid</h2>
-  
+    <h2 style="color:white;"><%= moviesList[0].first_name %> <%= moviesList[0].last_name %> filmid</h2>
+	<% moviesList.forEach(function(item){ %>
+	<li style="color:white;"> <%= item.title %>, <%= item.production_year %>, <%= item.duration %> minutid, <%= item.role %> </li>
+	<% }); %>
 <hr>
 </body>
 </html> 

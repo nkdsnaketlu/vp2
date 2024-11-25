@@ -7,7 +7,8 @@ const {movieHome,
 	addMovieInfo,
 	addingMovieInfo,
 	movieRelations,
-	addRealtion} = require("../controllers/moviesController");
+	addingRealtion,
+	addedRelation} = require("../controllers/moviesController");
 
 //kõikidele marsruudidele vahevara checkLogin
 router.use(general.checkLogin);
@@ -22,7 +23,9 @@ router.route("/lisa").post(addingMovieInfo);
 
 router.route("/personrelations/:id").get(movieRelations);
 
-router.route("/lisaseos").get(addRealtion);
+router.route("/lisaseos").get(addingRealtion);
+
+router.route("/lisaseos").post(addedRelation);
 
 module.exports = router;
 
