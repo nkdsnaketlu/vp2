@@ -44,6 +44,9 @@ const conn = mysql.createConnection({
 const newsRouter = require("./routes/newsrouter");
 app.use("/news", newsRouter);
 
+const wheatherRouter = require("./routes/wheaterrouter");
+app.use("/wheather", wheatherRouter);
+
 const moviesRouter = require("./routes/moviesrouter");
 app.use("/eestifilm", moviesRouter);
 
@@ -297,7 +300,7 @@ app.get("/vanasonad", (req, res)=>{
 	
 });
 
-app.post("/gallery/photoupload", upload.single("photoInput"), (req, res)=>{
+/*app.post("/gallery/photoupload", upload.single("photoInput"), (req, res)=>{
 	console.log(req.body);
 	console.log(req.file);
 	const fileName = "vp_" + Date.now() + ".jpg";
@@ -337,7 +340,7 @@ app.get("/gallery/photos", (req, res)=>{
 		}
 	});
 	//res.render("gallery");
-});
+});*/
 
 //uudiste osa on eraldi ruuteriga
 
@@ -359,5 +362,10 @@ function checkLogin(req, res, next){
 	}
 }
 
+const photoupRouter = require("./routes/photouprouter");
+app.use("/photoupload", photoupRouter);
+
+const galleryRouter = require("./routes/galleryrouter");
+app.use("/gallery", galleryRouter);
 
 app.listen(5216);
