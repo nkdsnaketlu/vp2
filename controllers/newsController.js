@@ -72,7 +72,7 @@ const newsList = (req, res)=>{
 
 const getNews = (req, res)=>{
 	console.log(req.params.id);
-	let sqlReq = "SELECT news_title, news_text, news_date, first_name, last_name FROM vp_users JOIN vpnews ON vp_users.id=vpnews.user_id WHERE vpnews.id=?";
+	let sqlReq = "SELECT * FROM vp_users JOIN vpnews ON vp_users.id=vpnews.user_id WHERE vpnews.id=?";
 	//let sqlReq = "SELECT news_title, news_text, news_date, first_name, last_name FROM vpnews WHERE vpnews.id=?";
 	//news = [];
 	let id = req.params.id;
@@ -94,10 +94,77 @@ const getNews = (req, res)=>{
 	//res.render("readNews");
 };
 
+//@desc edit news
+//@route GET /api/news
+//@access private
+
+const editNews = (req, res)=>{
+	console.log(req.params.id);
+	let sqlReq = "SELECT * FROM vp_users JOIN vpnews ON vp_users.id=vpnews.user_id WHERE vpnews.id=?";
+	let id = req.params.id;
+	if (!req.params.id) {
+        return res.status(400).send("ID новости не указан");
+    } else {
+		conn.execute(sqlReq, [id.slice(3)], (err, sqlRes) => {
+			if (err) {
+                console.error("Error:", err);
+				res.render("editnews", {news: []});
+			} else {
+				console.log(sqlReq);
+				console.log(sqlRes);
+                res.render("editnews", {news: sqlRes});
+            }
+		});
+	};
+	
+	//res.render("readNews");
+};
+
+//@desc editing news
+//@route GET /api/news
+//@access private
+
+const editingNews = (req, res)=>{
+	let sql = 'UPDATE vpnews SET news_title = ?, news_text = ?, expire_date = ? WHERE id=?;';
+	let id = req.params.id;
+	console.log(req.params.id, req.body.newTitleInput, req.body.newContentInput);
+	
+	if (!req.body.newTitleInput){
+		let newTitle = "news_title";
+	} else {
+		let newTitle = '"' + req.body.newTitleInput + '"';
+	}
+	if (!req.body.newContentInput){
+		let newContent = "news_text";
+	} else {
+		let newContent = '"' +  req.body.newContentInput  + '"';
+	}
+	if (!req.body.newExpireInput){
+		let newExpireInput = "expire_date";
+	} else {
+		let newExpireInput = '"' +  newExpireInput  + '"';
+	}
+	
+	console.log(newTitle,newContent);
+	conn.execute(sql, [newTitle, newContent, newExpireInput, [id.slice(3)]/*req.session.userId*/], (err, result)=>{
+		if(err) {
+			throw err;
+			notice = 'Uudise salvestamine ebaõnnestus!';
+			res.render('editnews', {notice: notice});
+		} else {
+			notice = 'Uudis edukalt salvestatud!';
+			res.render('editnews', {notice: notice});
+		}
+	});
+
+};
+
 module.exports = {
 	newsHome,
 	addNews,
 	addingNews,
 	newsList,
-	getNews
+	getNews,
+	editNews,
+	editingNews
 };

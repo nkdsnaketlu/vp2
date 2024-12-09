@@ -7,13 +7,13 @@ const {XMLParser} = require("fast-xml-parser");
 const weatherHome = (req, res)=>{
 	axios.get("https://www.ilmateenistus.ee/ilma_andmed/xml/forecast.php")
 	.then(response => {
+		//console.log("Alustuseks: " + response);
 		const parser = new XMLParser();
 		let weatherData = parser.parse(response.data);
 		//console.log(weatherData);
 		//console.log(weatherData.forecasts);
 		console.log(weatherData.forecasts.forecast[0]);
 		//let thing = weatherData.forecasts.forecast[0];
-		//console.log(thing.getAttribute("date"));
 		console.log(weatherData.forecasts.forecast[0].day.text);
 		res.render("wheather");
 	})

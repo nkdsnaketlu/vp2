@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+	<meta charset="utf-8">
+	<title>Edit news</title>
+</head>
+<body style="background-color:#2b3d5c;">';
+	<img src="/banner/vp_banner_2024.png" alt="vb 2024 aasta kursuse bänner">';
+	<h1 style="color:white;" >Maria Rjabtseva </h1>
+	<p style="color:white;">See leht on loodud õppetöö raames <a href="https://www.tlu.ee" style="color: #94d0fa">Tallinna ülikoolis</a>, Digitehnoloogiate instituudis ja ei sisalda tõsiseltvõetavat materjali</p>
+	<hr>
+	<h2 style="color: white">Vinge veeb</h2>
+	<ul style="color: white">
+	 <li><a href="/news/add" style="color: #94d0fa">Uudise lisamine</a></li>
+		<li><a href="/news/read"style="color: #94d0fa" >Uudiste lugemine</a></li>
+		<li><a href="/home" style="color: #94d0fa">Kodulehele</a></li>
+		<li><a href="/" style="color: #94d0fa">Avalehele</a></li>
+	</ul>
+	<hr>
+	<h2 style="color:white;"><%=news[0].news_title%></h2>
+	  <p style="color:white;"><%=news[0].news_text%></p>
+	  <p style="color:white;">Added: <%=news[0].news_date%></p>
+	  <p style="color:white;">Autor: <%=news[0].first_name%> <%=news[0].last_name%></p>
+	  <p style="color:white;">redigeerida see uudis</p>
+	<hr>
+	<h2 style="color: white">Redigeeida uudise sisu</h2>
+	<form method="POST">
+		<label style="color: white" for="newTitleInput">Uudise pealkiri</label>
+		<input type="text" name="newTitleInput" id="newTitleInput" placeholder="Uudise pealkiri ...">
+		<br>
+		<label style="color: white" for="newContentInput">Uudise sisu</label>
+		<br>
+		<textarea id="newContentInput" name="newContentInput" placeholder="Uudise sisu ..." rows="5" cols="80" maxlength="2000"></textarea>
+		<br>
+		<label style="color: white" for="newExpireInput">Uudise aegumiskuupäev</label>
+		<input type="date" name="newExpireInput" id="newExpireInput" >
+		<br>
+		<input type="submit" name="newsSubmit" value="Salvesta">
+	</form>
+	<p style="color: gray"><%= locals.notice || 'Ootel!' %></p>
+</body>
+</html>
+</body>
+</html>
